@@ -1,28 +1,28 @@
-import java.util.ArrayList;
+import java.util.Queue;
 
 public class Consumer implements Runnable {
-	ArrayList<Integer> list = new ArrayList<Integer>();
+	Queue<Integer> buffer;
 	
-	public Consumer(ArrayList<Integer> list) {
-		this.list = list;
+	public Consumer(Queue<Integer> buffer) {
+		this.buffer = buffer;
 	}
 
 	public void run(){
 		while(true) {
-			synchronized (list) {
-				while(list.size() == 0) {
-					wait();	
+			synchronized (buffer) {
+				while(buffer.size() == 0) {
+					try {
+						wait();
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}	
 			}
 				
-			int consume = list.remove();
+			int consume = buffer.remove();
 			System.out.println("Consumed" + consume);
 			notify();
-			try {
-				Thread.sleep(1000);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			
 			
 			}
 		}
