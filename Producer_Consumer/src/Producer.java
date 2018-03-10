@@ -1,14 +1,14 @@
-import java.util.ArrayList;
+import java.util.Queue;
 import java.util.Random;
 
 
 public class Producer implements Runnable {
-	ArrayList<Integer> list = new ArrayList<Integer>();
+	Queue<Integer> buffer;
 	int capacity;
 	
-	public Producer(ArrayList<Integer> list, int capacity) {
+	public Producer(Queue<Integer> buffer, int capacity) {
 		super();
-		this.list = list;
+		this.buffer = buffer;
 		this.capacity= capacity;
 	}
 	
@@ -18,25 +18,20 @@ public class Producer implements Runnable {
 		int product = number.nextInt(capacity);
 		
 		while(true) {
-			synchronized (list) {
-			while(list.size() == capacity) {
-					try {
-						wait();
-					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
+			synchronized (buffer) {
+			while(buffer.size() == capacity) {
+				try {
+					wait();
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+					
 			}
 			System.out.println("Produced: " + product);
-			list.add(product);
+			buffer.add(product);
 			notify();
 			
-			try {
-				Thread.sleep(1000);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
 			}
 		}
 	}
