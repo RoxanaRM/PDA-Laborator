@@ -1,13 +1,14 @@
-import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Queue;
 
 public class Main {
 
 	public static void main(String[] args)throws InterruptedException {
 		
-		ArrayList<Integer> list = new ArrayList<Integer>();
+		Queue<Integer> buffer = new LinkedList<Integer>();
 		
-		Thread t1 = new Thread (new Producer(list, 6));
-		Thread t2 = new Thread (new Consumer(list));
+		Thread t1 = new Thread (new Producer(buffer, 6));
+		Thread t2 = new Thread (new Consumer(buffer));
 		
 		t1.start();
 		t2.start();
